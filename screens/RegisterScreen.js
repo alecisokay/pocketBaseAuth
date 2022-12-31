@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, KeyboardAvoidingView, TextInput  } from 'react-native'
 import PocketBase from 'pocketbase';
-import { useNavigation } from '@react-navigation/native';
 
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
     const pb = new PocketBase('http://127.0.0.1:8090');
 
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
+    const [name, setName] = useState('')
+    const role = 'role'
 
-    const navigation = useNavigation();
 
-    useEffect(() => {
-        if(pb.authStore.isValid){
-            navigation.navigate('Home')
-        }
-    }, [])
+    
+
+    const data = {
+        "username": "test_username",
+        "email": "test@example.com",
+        "emailVisibility": true,
+        "password": "12345678",
+        "passwordConfirm": "12345678",
+        "name": "test",
+        "role": "user"
+    };
     
 
   return (
@@ -27,6 +35,12 @@ const LoginScreen = () => {
     >
 
       <View style={styles.inputContainer}>
+      <TextInput 
+        placeholder='Username' 
+        value={username}
+        onChangeText={ text => setUsername(text)}
+        style={styles.input}
+         />
         <TextInput 
         placeholder='Email' 
         value={email}
@@ -41,43 +55,56 @@ const LoginScreen = () => {
             style={styles.input}
             secureTextEntry
          />
+         <TextInput 
+            placeholder='Confirm Password' 
+            value={passwordConfirm}
+            onChangeText={ text => setPasswordConfirm(text)}
+            style={styles.input}
+            secureTextEntry
+         />
+         <TextInput 
+            placeholder='name' 
+            value={passwordConfirm}
+            onChangeText={ text => setName(text)}
+            style={styles.input}
+            secureTextEntry
+         />
 
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
         onPress={async ()=> { 
+            const data = {
+                "username": username,
+                "email": email,
+                "emailVisibility": true,
+                "password": password,
+                "passwordConfirm": passwordConfirm,
+                "name": name,
+                "role": role
+            };
 
-            const authData = await pb.collection('users').authWithPassword(
-                email,
-                password,
-            );
+            const record = await pb.collection('users').create(data);
 
-            if(pb.authStore.isValid){
-                        navigation.navigate('Home')
-                    }
-            console.log(pb.authStore.isValid);
-            console.log(pb.authStore.token);
-            console.log(pb.authStore.model.id);
         }}
         style={styles.button}
         >
-            <Text style={styles.buttonText}>login</Text>
+            <Text style={styles.buttonText}>register</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
-        onPress={()=> {}}
-        //     navigation.navigate('Registration')}
-        // style={styles.button}
+        onPress={()=> { }}
+        style={styles.button}
         >
-            <Text style={styles.buttonText}>register</Text>
+            <Text style={styles.buttonText}>back</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   )
 }
 
-export default LoginScreen
+export default RegisterScreen
 
 const styles = StyleSheet.create({
     container:{
