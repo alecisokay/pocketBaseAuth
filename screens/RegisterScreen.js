@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, KeyboardAvoidingView, TextInput  } from 'react-native'
 import PocketBase from 'pocketbase';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const RegisterScreen = () => {
@@ -11,20 +13,20 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState('')
     const [passwordConfirm, setPasswordConfirm] = useState('')
     const [name, setName] = useState('')
-    const role = 'role'
+    const role = 'user'
 
+    const navigation = useNavigation();
 
-    
+    // const data = {
+    //     "username": "test_username1",
+    //     "email": "test1@example.com",
+    //     "emailVisibility": true,
+    //     "password": "12345678",
+    //     "passwordConfirm": "12345678",
+    //     "name": "test",
+    //     "role": "user"
+    // };
 
-    const data = {
-        "username": "test_username",
-        "email": "test@example.com",
-        "emailVisibility": true,
-        "password": "12345678",
-        "passwordConfirm": "12345678",
-        "name": "test",
-        "role": "user"
-    };
     
 
   return (
@@ -64,10 +66,9 @@ const RegisterScreen = () => {
          />
          <TextInput 
             placeholder='name' 
-            value={passwordConfirm}
+            value={name}
             onChangeText={ text => setName(text)}
             style={styles.input}
-            secureTextEntry
          />
 
       </View>
@@ -81,10 +82,15 @@ const RegisterScreen = () => {
                 "password": password,
                 "passwordConfirm": passwordConfirm,
                 "name": name,
-                "role": role
+                "role": "user"
             };
-
+            
             const record = await pb.collection('users').create(data);
+            if(pb.authStore.isValid){
+                navigation.navigate('Home');
+            } else {
+                navigation.navigate('Login');
+            }
 
         }}
         style={styles.button}
@@ -94,7 +100,12 @@ const RegisterScreen = () => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
-        onPress={()=> { }}
+        onPress={()=> { 
+
+            navigation.navigate('Login')
+        
+        }}
+        
         style={styles.button}
         >
             <Text style={styles.buttonText}>back</Text>
