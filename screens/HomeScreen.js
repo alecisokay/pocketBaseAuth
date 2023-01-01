@@ -13,9 +13,7 @@ const HomeScreen = () => {
         behavior="padding"
         
         >
-    
-          
-        
+        <Text> email: {pb.authStore.model.email}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
             onPress={()=> {
