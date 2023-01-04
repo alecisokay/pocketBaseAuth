@@ -17,16 +17,6 @@ const RegisterScreen = () => {
 
     const navigation = useNavigation();
 
-    // const data = {
-    //     "username": "test_username1",
-    //     "email": "test1@example.com",
-    //     "emailVisibility": true,
-    //     "password": "12345678",
-    //     "passwordConfirm": "12345678",
-    //     "name": "test",
-    //     "role": "user"
-    // };
-
     
 
   return (
